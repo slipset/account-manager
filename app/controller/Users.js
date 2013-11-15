@@ -8,30 +8,24 @@ Ext.define('AM.controller.Users', {
 	stores: ['Users'],
 	models: ['User'],
 
-    init: function() {
+    init: function () {
         this.control({
             'userlist': {
                 itemdblclick: this.editUser
             },
-			'useredit button[action=save]': {
-                click: this.updateUser
+	        'useredit': {
+                updateUser: this.updateUser
             }
         });
     },
 
-    editUser: function(grid, record) {
+    editUser: function (grid, record) {
         var view = Ext.widget('useredit');
-
         view.down('form').loadRecord(record);
     },
-	
-	updateUser: function(button) {
-        var win    = button.up('window'),
-		form   = win.down('form'),
-		record = form.getRecord(),
-		values = form.getValues();
-		record.set(values);
-		win.close();
+
+	updateUser: function (view, user) {
+		view.close();
 		// synchronize the store after editing the record
 		this.getUsersStore().sync();
     }
