@@ -26,7 +26,6 @@ Ext.define('AM.controller.Users', {
 
 	updateUser: function (view, user) {
 		view.close();
-		// synchronize the store after editing the record
 		this.getUsersStore().sync();
     }
 });

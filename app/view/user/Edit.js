@@ -6,7 +6,7 @@ Ext.define('AM.view.user.Edit', {
 	autoShow: true,
 	initComponent: function () {
 		var me = this;
-			me.items = [
+		me.items = [
 			{
 				xtype: 'form',
 				items: [
@@ -27,14 +27,9 @@ Ext.define('AM.view.user.Edit', {
 			{
 				text: 'Save',
 				handler: function () {
-					var form   = me.down('form'),
-
-					   // checkout form.updateRecord or such
-					    record = form.getRecord(),
-					    values = form.getValues();
-					record.set(values);
-					me.fireEvent("updateUser", me, record);
-
+					var form   = me.down('form').getForm();
+					form.updateRecord();
+					me.fireEvent("updateUser", me, form.getRecord());
 				}
 			},
 			{
