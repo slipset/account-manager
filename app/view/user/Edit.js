@@ -6,6 +6,21 @@ Ext.define('AM.view.user.Edit', {
 	autoShow: true,
 	initComponent: function () {
 		var me = this;
+		
+		me.refs = (function (self) {
+			var form; // privately scoped variable
+			var getForm = function () {
+				// Only run component query for the form once per view instance, 
+				// this enables us to call this many method as many times in the view as we would like,
+				// without considering performance issues.
+				if(typeof form == 'undefined') {
+					form = self.down('form').getForm();
+				}
+				return form;
+			}
+			return {getForm: getForm}
+		}(me));
+		
 		me.items = [
 			{
 				xtype: 'form',
@@ -23,21 +38,22 @@ Ext.define('AM.view.user.Edit', {
 				]
 			}
 		];
+		
 		me.buttons = [
 			{
 				text: 'Save',
 				handler: function () {
-					var form   = me.down('form').getForm();
-					form.updateRecord();
-					me.fireEvent("updateUser", me, form.getRecord());
+					me.refs.getForm().updateRecord();
+					me.fireEvent("updateUser", me, me.refs.getForm().getRecord());
 				}
 			},
 			{
 				text: 'Cancel',
-				scope: this,
-				handler: this.close
+				scope: me,
+				handler: me.close
 			}
 		];
-		this.callParent(arguments);
+		
+		me.callParent(arguments);
 	}
 });
