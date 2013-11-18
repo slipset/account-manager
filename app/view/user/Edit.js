@@ -3,48 +3,39 @@ Ext.define('AM.view.user.Edit', {
 	alias: 'widget.useredit',
 	title: 'Edit User',
 	layout: 'fit',
-	autoShow: true,
+
+	autoCreate: true,
+	config: {
+		user: null
+	},
+	
 	initComponent: function () {
 		var me = this;
-		
-		me.refs = (function (self) {
-			var form; // privately scoped variable
-			var getForm = function () {
-				// Only run component query for the form once per view instance, 
-				// this enables us to call this many method as many times in the view as we would like,
-				// without considering performance issues.
-				if(typeof form == 'undefined') {
-					form = self.down('form').getForm();
+		me.form = new Ext.FormPanel({
+			items: [
+				{
+					xtype: 'textfield',
+					name : 'name',
+					fieldLabel: 'Name'
+				},
+				{
+					xtype: 'textfield',
+					name : 'email',
+					fieldLabel: 'Email'
 				}
-				return form;
-			}
-			return {getForm: getForm}
-		}(me));
+			]
+		});
 		
 		me.items = [
-			{
-				xtype: 'form',
-				items: [
-					{
-						xtype: 'textfield',
-						name : 'name',
-						fieldLabel: 'Name'
-					},
-					{
-						xtype: 'textfield',
-						name : 'email',
-						fieldLabel: 'Email'
-					}
-				]
-			}
+			me.form
 		];
 		
 		me.buttons = [
 			{
 				text: 'Save',
 				handler: function () {
-					me.refs.getForm().updateRecord();
-					me.fireEvent("updateUser", me, me.refs.getForm().getRecord());
+					me.form.updateRecord();
+					me.fireEvent("updateUser", me, me.getUser());
 				}
 			},
 			{

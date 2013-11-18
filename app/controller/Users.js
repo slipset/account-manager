@@ -5,13 +5,21 @@ Ext.define('AM.controller.Users', {
         'user.List',
         'user.Edit'
     ],
+	refs: [
+        {
+            ref: 'editUser',
+            selector: 'useredit'
+        }
+	],
+
 	stores: ['Users'],
 	models: ['User'],
 
     init: function () {
         this.control({
             'userlist': {
-                itemdblclick: this.editUser
+                editUser: this.editUser,
+	            newUser: this.newUser
             },
 	        'useredit': {
                 updateUser: this.updateUser
@@ -19,13 +27,22 @@ Ext.define('AM.controller.Users', {
         });
     },
 
+	newUser: function(grid)  {
+		var me = this; 
+		me.editUser(grid, Ext.create('AM.model.User'));
+    },
+
     editUser: function (grid, record) {
-        var view = Ext.widget('useredit');
-        view.down('form').loadRecord(record);
+        var me = this,
+            view = Ext.create("AM.view.user.Edit");
+	    view.setUser(record);
+	    view.show();
     },
 
 	updateUser: function (view, user) {
+		var me = this;
 		view.close();
-		this.getUsersStore().sync();
+		me.getUsersStore().add(user);
+//		this.getUsersStore().sync();
     }
 });

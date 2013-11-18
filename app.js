@@ -14,5 +14,10 @@ Ext.application({
                 xtype: 'userlist'
             }
         });
+	    var store =  Ext.getStore("Users");
+	    store.add(Ext.create("AM.model.User", {
+		    name: "Erik",
+		    email: "erik@foo.com"
+	    }));	    
     }
 });
